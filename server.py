@@ -1,7 +1,7 @@
 import socket
 import logging
 
-def server(host = "::1", port=8082):
+def server(host = "::", port=8082):
     data_payload = 2048 #tamanho maximo da mensagem recebida
     
     #cria o socket tcp
