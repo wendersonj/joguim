@@ -1,15 +1,16 @@
 import socket
 import logging
-def client(host="localhost", port=8082):
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+def client(host="::1", port=8082):
+    sock = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)
     # conexão
-    server_address = (host, port)
+    server_address = (host, port, 0,0)
     logging.getLogger("Server").info(f"Tentando conectar ao servidor de endereço e porta {server_address}")
     sock.connect(server_address)
     logging.getLogger("Server").info("Conectado")
     try:
         #enviar dados
-        message = "Testando mensagem 1".encode("utf-8")
+        message = "Testando mensagem 1".encode()
         logging.getLogger("Server").info(f"Enviando mensagem: {message}")
         sock.sendall(message)
         
@@ -17,19 +18,19 @@ def client(host="localhost", port=8082):
         amount_received = 0
         amount_expected = len(message)
         while(amount_received < amount_expected):
-            data = sock.recv(16)
+            data = sock.recv(16).decode()
             amount_received += len(data)
             logging.getLogger("Server").info(f"Recebido: {data}")
 
-        message = "close".encode("utf-8")
+        message = "close".encode()
         logging.getLogger("Server").info(f"Enviando mensagem: {message}")
-        sock.sendall(message)
+        sock.sendall(message)   
 
         #Espera por uma resposta
         amount_received = 0
         amount_expected = len(message)
         while(amount_received < amount_expected):
-            data = sock.recv(16)
+            data = sock.recv(16).decode()
             amount_received += len(data)
             logging.getLogger("Server").info(f"Recebido: {data}")
 
